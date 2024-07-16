@@ -102,7 +102,31 @@ const server = http.createServer(function (req, res) {
     }
 
     if (req.url === "/items/store/change/submit" && req.method === "POST") {
-        console.log("CHANGED!!!!");
+        let body = [];
+        req.on('data', (chunk) => {
+            body.push(chunk);
+        })
+        .on('end', () => {
+            body = Buffer.concat(body).toString('utf-8').split('&');
+            let itemId = body[0].split('=')[1];
+            let itemTitle = body[1].split('=')[1];
+            let itemImage = body[2].split('=')[1];
+            // console.log(itemId, itemTitle, itemImage);
+            let fileContent = fs.readFileSync('./items.json', 'utf-8');
+            let data = JSON.parse(fileContent);
+            // console.log("Data: ", data[(itemId-1)]);
+            data[(itemId-1)].title = itemTitle;
+            data[(itemId-1)].image = itemImage;
+            // console.log("Changed data: ", data[(itemId-1)]);
+            fs.writeFile('./items.json',
+                JSON.stringify(data, null, 4),
+                () => {
+                    res.writeHead(302, {
+                        "location" : "/"
+                });
+                res.end();
+            });
+        });
     }
 
     if (req.url === "/items/store/delete" && req.method === "POST") {

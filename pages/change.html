@@ -3,10 +3,10 @@
     <h1>{{title}}</h1>
         <form action="/items/store/change/submit" method="post">
             <div class="form-group">
-                <label class="form-group__label" for="id">id</label>
+                <label class="form-group__label" for="id">id {{itemId}}</label>
                 <input
                     class="form-group__input"
-                    type="number"
+                    type="hidden"
                     id="id"
                     name="id"
                     placeholder="id"
