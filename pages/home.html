@@ -2,21 +2,25 @@
     {{> navigation}}
     <h1>{{title}}</h1>
     {{#items}}
-    <div class="section">
-        <a href="/items/{{id}}">
-            <h2 class="section__title">{{title}}</h2>
-            <img class="section__image" src="../{{image}}" />
-        </a>
-        <div class="section__btnContainer">
-            <form action="/items/store/delete" method="post">
-                <input type="hidden" name="id" value="{{id}}">
-                <button type="submit">DELETE</button>
-            </form>
-            <form action="/items/store/change" method="post">
-                <input type="hidden" name="id" value="{{id}}">
-                <button type="submit">CHANGE</button>
-            </form>
-        </div>
-    </div>
+        {{#isDeleted}}
+        {{/isDeleted}}
+            {{^isDeleted}}
+                <div class="section">
+                    <a href="/items/{{id}}">
+                        <h2 class="section__title">{{title}}</h2>
+                        <img class="section__image" src="../{{image}}" />
+                    </a>
+                    <div class="section__btnContainer">
+                        <form action="/items/store/delete" method="post">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <button type="submit">DELETE</button>
+                        </form>
+                        <form action="/items/store/change" method="post">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <button type="submit">CHANGE</button>
+                        </form>
+                    </div>
+                </div>
+            {{/isDeleted}}
     {{/items}}
 {{> footer}}

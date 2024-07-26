@@ -19,12 +19,16 @@ const server = http.createServer(function (req, res) {
         let fileContent = fs.readFileSync('./items.json', 'utf8');
         let data = JSON.parse(fileContent);
         let template = fs.readFileSync('./pages/home.html').toString();
-        // console.log(data);
-        res.end(Mustache.render(template, { title: 'Home', items: data }, {
-            header: fs.readFileSync('./pages/partials/header.html').toString(),
-            navigation: fs.readFileSync('./pages/partials/navigation.html').toString(),
-            footer: fs.readFileSync('./pages/partials/footer.html').toString(),
-        }));
+        
+        console.log("HOME-page data to render: ", data);
+        res.end(Mustache.render(template, {
+                title: 'Home', 
+                items: data, 
+            }, {
+                header: fs.readFileSync('./pages/partials/header.html').toString(),
+                navigation: fs.readFileSync('./pages/partials/navigation.html').toString(),
+                footer: fs.readFileSync('./pages/partials/footer.html').toString(),
+            }));
 }
 
     if (/^\/items\/[0-9]+$/.test(req.url) && req.method === 'GET') {
@@ -147,11 +151,16 @@ const server = http.createServer(function (req, res) {
                 let id = body[0].value;
                 let fileContent = fs.readFileSync('./items.json', 'utf-8');
                 let data = JSON.parse(fileContent);
-                // console.log("DATA: ", data);
-                // console.log("ID:", id);
-                // console.log("Data by id:", data[(id-1)]);
-                data.splice(id-1,1);
-                // console.log("DATA AFTER: ", data);
+                console.log("\n[DELETE ELEMENT ACTION]\n");
+                console.log("DATA: ", data);
+                console.log("ID:", id);
+                console.log("Data by id:", data[(id-1)]);
+                let operData = data[(id-1)];
+                operData.title = undefined;
+                operData.image = undefined;
+                operData.isDeleted = true;
+                
+                console.log("DATA AFTER: ", data);
                 
                 fs.writeFile('./items.json',
                     JSON.stringify(data, null, 4),
